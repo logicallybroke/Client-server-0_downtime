@@ -26,7 +26,7 @@ function sendMessage() {
     messageCounter++;
     serverIndex = (serverIndex + 1) % servers.length;
 
-    // Continue sending messages every 2 seconds
+    // Continue sending messages every 5 seconds
     setTimeout(sendMessage, 5000);
 }
 

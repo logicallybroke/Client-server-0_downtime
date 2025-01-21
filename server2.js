@@ -4,7 +4,6 @@ const path = require('path');
 
 const dataFilePath = './data/server2_messages.txt';
 
-// Ensure the directory exists
 const dataDir = path.dirname(dataFilePath);
 if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
@@ -13,7 +12,7 @@ if (!fs.existsSync(dataDir)) {
 const server = net.createServer((socket) => {
     socket.on('data', (data) => {
         const message = data.toString().trim();
-        fs.appendFileSync(dataFilePath, message + '\n'); // Save message to file
+        fs.appendFileSync(dataFilePath, message + '\n'); 
         console.log(`Server 2 received and saved: ${message}`);
     });
 
