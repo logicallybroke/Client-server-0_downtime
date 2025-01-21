@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: client
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: client:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER1_HOST
+              value: "server1-service" # Service name for server1
+            - name: SERVER1_PORT
+              value: "9999"           # Port for server1
+            - name: SERVER2_HOST
+              value: "server2-service" # Service name for server2
+            - name: SERVER2_PORT
+              value: "10000"          # Port for server2
+          command: ["node", "client.js"]

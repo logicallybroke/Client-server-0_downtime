@@ -1,0 +1,14 @@
+# Use the official Node.js 18 image as the base
+FROM node:18
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the server1.js file into the container
+COPY server1.js .
+
+# Expose the port used by server1
+EXPOSE 9999
+
+# Set the command to run the server1 script
+CMD ["node", "server1.js"]

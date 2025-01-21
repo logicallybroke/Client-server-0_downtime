@@ -1,0 +1,13 @@
+# server2-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: server2-service
+spec:
+  selector:
+    app: server2
+  ports:
+    - protocol: TCP
+      port: 10000      # Exposed port for the client
+      targetPort: 10000 # Port used by the server2 container
+  type: ClusterIP

@@ -1,0 +1,13 @@
+# Use the official Node.js 18 image as a base
+FROM node:18
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the client.js file into the container
+COPY client.js .
+
+# Install dependencies (if any) - currently skipped as there are no npm dependencies
+
+# Set the default command to run the client script
+CMD ["node", "client.js"]

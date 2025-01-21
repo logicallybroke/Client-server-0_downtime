@@ -1,0 +1,28 @@
+# server2-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: server2
+  template:
+    metadata:
+      labels:
+        app: server2
+    spec:
+      containers:
+        - name: server2
+          image: server2:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 10000
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-pvc
