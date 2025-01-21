@@ -7,5 +7,6 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /data
