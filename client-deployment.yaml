@@ -20,11 +20,20 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: SERVER1_HOST
-              value: "server1-service" # Service name for server1
+              value: "server1-service"
             - name: SERVER1_PORT
-              value: "9999"           # Port for server1
+              value: "9999"
             - name: SERVER2_HOST
-              value: "server2-service" # Service name for server2
+              value: "server2-service"
             - name: SERVER2_PORT
-              value: "10000"          # Port for server2
+              value: "10000"
+            - name: MESSAGE_STATE_FILE
+              value: "/data/message-state.txt" # Path to state file
           command: ["node", "client.js"]
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: data-pvc

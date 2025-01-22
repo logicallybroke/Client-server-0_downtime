@@ -1,20 +1,30 @@
 const net = require('net');
+const fs = require('fs');
+const path = process.env.MESSAGE_STATE_FILE || '/data/message-state.json'; // Path to the state file
 
 const servers = [
     { host: process.env.SERVER1_HOST, port: parseInt(process.env.SERVER1_PORT) },
     { host: process.env.SERVER2_HOST, port: parseInt(process.env.SERVER2_PORT) }
 ];
-// const servers = [
-//     { host: "localhost", port: 9999},
-//     { host: "localhost", port: 10000 }
-// ];
 
+// Default values for message counter and server index
 let messageCounter = 1;
 let serverIndex = 0;
 
+// Load state from file
+if (fs.existsSync(path)) {
+    try {
+        const state = JSON.parse(fs.readFileSync(path, 'utf8'));
+        messageCounter = state.messageCounter || messageCounter;
+        serverIndex = state.serverIndex || serverIndex;
+        console.log(`Resumed from state: messageCounter=${messageCounter}, serverIndex=${serverIndex}`);
+    } catch (err) {
+        console.error(`Error reading state file: ${err.message}`);
+    }
+}
+
 function sendMessage() {
     const server = servers[serverIndex];
-    // const message = messageCounter.toString();
     const message = fun(messageCounter);
 
     const client = new net.Socket();
@@ -28,8 +38,17 @@ function sendMessage() {
         console.error(`Error connecting to ${server.host}:${server.port}: ${err.message}`);
     });
 
+    // Update counters
     messageCounter++;
     serverIndex = (serverIndex + 1) % servers.length;
+
+    // Save state to file
+    const state = { messageCounter, serverIndex };
+    try {
+        fs.writeFileSync(path, JSON.stringify(state), 'utf8');
+    } catch (err) {
+        console.error(`Error saving state: ${err.message}`);
+    }
 
     // Continue sending messages every 5 seconds
     setTimeout(sendMessage, 5000);
@@ -70,4 +89,5 @@ function fun(num) {
     return result.trim();
 }
 
+// Start sending messages
 sendMessage();
